@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const jwt = require("express-jwt");
 
 const app = express();
 
@@ -23,6 +24,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/api", bookRouter);
 app.use("/api", userRouter);
+app
+	.all("/appi/*", jwt({ secret: "secret", algorithms: ["HS256"] }))
+	.unless({ path: ["api/login"] });
 
 const port = 3001;
 app.listen(port, () => {
